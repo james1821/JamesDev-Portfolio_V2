@@ -5,9 +5,8 @@ const props = defineProps<{ personal: Personal }>()
 const emit = defineEmits<{ (e: 'navigate', page: string): void }>()
 
 const titles = [
-
-  'Full-Stack Web Developer'
   
+  'Full-Stack Web Developer'
 ]
 
 const displayedTitle = ref('')
@@ -17,21 +16,36 @@ let timeout: ReturnType<typeof setTimeout>
 
 function tick() {
   const full = titles[titleIndex.value]
+
   if (!isDeleting.value) {
     displayedTitle.value = full.slice(0, displayedTitle.value.length + 1)
+
     if (displayedTitle.value === full) {
-      setTimeout(() => { isDeleting.value = true; tick() }, 2000)
+     
+      if (titleIndex.value === titles.length - 1) return
+
+      setTimeout(() => {
+        isDeleting.value = true
+        tick()
+      }, 2000)
       return
     }
+
     timeout = setTimeout(tick, 65)
+
   } else {
     displayedTitle.value = full.slice(0, displayedTitle.value.length - 1)
+
     if (displayedTitle.value === '') {
       isDeleting.value = false
-      titleIndex.value = (titleIndex.value + 1) % titles.length
+
+      if (titleIndex.value === titles.length - 1) return
+
+      titleIndex.value += 1
       timeout = setTimeout(tick, 350)
       return
     }
+
     timeout = setTimeout(tick, 38)
   }
 }
@@ -124,7 +138,7 @@ const quickLinks = [
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
-              Download Resume
+              Download CV
             </a>
           </div>
 
