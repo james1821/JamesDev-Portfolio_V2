@@ -1,0 +1,111 @@
+{
+  "personal": {
+    "name": "Mark James Espinosa",
+    "title": "Full-Stack Web Developer",
+    "summary": "Full Stack Web Developer with 2+ years of hands-on experience building, optimizing, and maintaining production web applications. Proficient in Vue.js, Nuxt.js, Laravel, PHP, and RESTful API integrations. Experienced in diagnosing and resolving performance bottlenecks, implementing OAuth authentication, and translating Figma designs into responsive, pixel-perfect interfaces. Comfortable collaborating across frontend, backend, and ERP integration layers in fast-paced remote environments.",
+    "photo": "https://i.ibb.co/Jj4zk9jg/Screenshot-2026-06-07-112058.png",
+    "email": "jamesespinosamark@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/mark-james-e-4b8146241",
+    "github": "https://github.com/james1821",
+   "resume": "/MarkJamesEspinosa_Resume.pdf"
+  },
+  "techstack": [
+    { "name": "Vue 3", "category": "Frontend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" },
+    { "name": "Nuxt", "category": "Frontend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg" },
+    { "name": "React", "category": "Frontend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    { "name": "Tailwind CSS", "category": "Frontend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
+    { "name": "Node.js", "category": "Backend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+    { "name": "Supabase", "category": "Backend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" },
+
+    { "name": "MongoDB", "category": "Database", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+    { "name": "MySQL", "category": "Database", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+    { "name": "TypeScript", "category": "Languages", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+    { "name": "JavaScript", "category": "Languages", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+    { "name": "PHP", "category": "Languages", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" },
+
+    { "name": "Git", "category": "Tools", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+    { "name": "Vite", "category": "Tools", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" },
+    { "name": "Figma", "category": "Tools", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+    { "name": "AWS", "category": "Tools", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" }
+  ],
+  "experience": [
+    {
+      "company": "Posbang Corporation",
+      "companyLogo": "https://media.licdn.com/dms/image/v2/C560BAQE8o9Tx-vMghA/company-logo_200_200/company-logo_200_200/0/1644997964200?e=1782345600&v=beta&t=kZsi72mY6gcsoSfpjT0CTjxCYvvhZGKFJpPu25iBJdY",
+      "role": "Web Developer",
+      "dates": "2024 – Present",
+      "description": "Developed and maintained web applications for the company’s internal tools and e-commerce platform. Optimized the camera rental system built on PrestaShop, implemented new features, and built modern frontend interfaces for Witty Manager V2 and V3 using Vue.js, Nuxt 3, and Tailwind CSS",
+      "tech": ["Nuxt", "TypeScript", "Tailwind CSS", "PHP", "PrestaShop", "JavaScript", "Git", "Vue", "Laravel", "MySQL", "Yii"]
+    },
+    {
+      "company": "iPhiTech IT and Digital Solutions ",
+      "companyLogo": "https://media.licdn.com/dms/image/v2/D560BAQEt-kZgv0XgXA/company-logo_200_200/company-logo_200_200/0/1690506291969/iphitech_logo?e=1782345600&v=beta&t=eWkew-fXcAUOccl_c6-Kcisk4rNX4iB1syR4RVd6Z3M",
+      "role": "Web Developer Intern",
+      "dates": "Feb 2023 – Jun 2023",
+      "description": "Transformed UI/UX design mockups into responsive, web pages and e-commerce sites using WordPress + Elementor and Shopify, along with HTML, CSS, and JavaScript. Collaborated with the mentor and the  team to ensure Good implementation and optimized user experience across devices.",
+      "tech": ["HTML/CSS", "JavaScript", "Shopify", "Elementor Plugin", "WordPress"]
+    },
+    {
+      "company": "Freelance Web Developer",
+      "companyLogo": "https://i.ibb.co/jv7MNFS1/Screenshot-2026-06-09-111001.png",
+      "role": "Web Developer ",
+      "dates": "2023 – Present",
+      "description": " websites and web apps for startups and small businesses, from concept to deployment, handling both design and engineering.",
+      "tech": ["HTML/CSS", "JavaScript", "Nuxt","React", "Tailwind CSS","Supabase",  "Git"]
+    }
+   
+  ],
+  "projects": [
+   {
+      "title": "Witty Manager V2",
+      "description": "Implemented Google OAuth 2.0 login via Laravel API. Developed a Quick Menu feature giving users rapid in-app navigation to frequently used tools. Redesigned and cleaned up core UI screens (login, signup, homepage) based on recommended web design , improving visual consistency across the platform. Maintained the codebase, fixed bugs, across the web application.",
+      "image": "https://i.ibb.co/4nkfLm0m/Screenshot-2026-06-09-134144.png",
+      "tech": [
+        "Vue 2",
+        "TypeScript",
+        "Tailwind",
+        "Laravel",
+        "MySQL",
+        "Git"
+      ],
+      "demo": "",
+      "github": ""
+    },
+    {
+      "title": "Witty Manager V3",
+      "description": "A real-time collaborative project management tool with drag-and-drop Kanban boards, role-based access, and Slack-style activity feeds.",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
+      "tech": ["Nuxt 4", "Supabase", "WebSockets", "Tailwind"],
+      "demo": "",
+      "github": ""
+    },
+    {
+      "title": "Handmade By Honey - E-commerce Store for Handcrafted and Fresh flowers",
+      "description": "A beautiful and fully-featured e-commerce platform specializing in handcrafted and fresh flower arrangements. Built with Nuxt 4, it offers customers a delightful shopping experience with order customization, while providing the shop owner with a powerful admin dashboard for product management, customer management, promo codes, analytics, and shipping configuration.",
+      "image": "https://i.ibb.co/nqPBDRhC/Screenshot-2026-06-10-084335.png",
+      "tech": ["Nuxt", "D3.js", "PostgreSQL", "Cloudflare"],
+      "demo": "https://pulse-analytics.io",
+      "github": "https://github.com/alexrivera/pulse"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "Javascript Algorithms and Data Structures ",
+      "issuer": "freeCodeCamp",
+      "issuerLogo": "https://media.licdn.com/dms/image/v2/C4E0BAQGLKj3JHcof0w/company-logo_100_100/company-logo_100_100/0/1630639684997/free_code_camp_logo?e=1782950400&v=beta&t=ynYTRff6UfAIT6yBLXuPB5YYjP40qZKJIkwz1gt5clo",
+      "date": "July 2023",
+      "description": "Comprehensive course covering fundamental algorithms and data structures in JavaScript, including sorting, searching, linked lists, trees, graphs, and dynamic programming.",
+      "link": "https://www.freecodecamp.org/certification/fcc71a9be58-9e3e-4387-86d9-7387e9390675/javascript-algorithms-and-data-structures"
+    },
+   
+    {
+      "title": "React(Basic)",
+      "issuer": "HackerRank",
+      "issuerLogo": "https://hrcdn.net/fcore/assets/brand/logo-new-white-green-a5cb16e0ae.svg",
+      "date": "August 2023",
+      "description": "Basic React patterns including hooks, components, and state management.",
+      "link": "https://www.hackerrank.com/certificates/0dc11c5d1ddb"
+    }
+   
+  ]
+}
