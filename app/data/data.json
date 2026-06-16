@@ -7,7 +7,7 @@
     "email": "jamesespinosamark@gmail.com",
     "linkedin": "https://www.linkedin.com/in/mark-james-e-4b8146241",
     "github": "https://github.com/james1821",
-   "resume": "/MarkJamesEspinosa_Resume.pdf"
+   "resume": "resume/MarkJamesEspinosa_Resume.pdf"
   },
   "techstack": [
     { "name": "Vue 3", "category": "Frontend", "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" },
@@ -73,7 +73,7 @@
     },
     {
       "title": "Witty Manager V3",
-      "description": "A real-time collaborative project management tool with drag-and-drop Kanban boards, role-based access, and Slack-style activity feeds.",
+      "description": "Translated complex Figma designs into responsive, pixel-perfect frontend components from scratch using Nuxt 3 and Tailwind CSS. Collaborated with the backend team on a Node.js API layer, ensuring seamless data flow across all frontend modules. Applied Nuxt 3 best practices (SSR, composables, layouts) to build a scalable, maintainable frontend architecture.",
       "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
       "tech": ["Nuxt 4", "Supabase", "WebSockets", "Tailwind"],
       "demo": "",
@@ -84,8 +84,8 @@
       "description": "A beautiful and fully-featured e-commerce platform specializing in handcrafted and fresh flower arrangements. Built with Nuxt 4, it offers customers a delightful shopping experience with order customization, while providing the shop owner with a powerful admin dashboard for product management, customer management, promo codes, analytics, and shipping configuration.",
       "image": "https://i.ibb.co/nqPBDRhC/Screenshot-2026-06-10-084335.png",
       "tech": ["Nuxt", "D3.js", "PostgreSQL", "Cloudflare"],
-      "demo": "https://pulse-analytics.io",
-      "github": "https://github.com/alexrivera/pulse"
+      "demo": "https://honey-flower-shop-v2-5srb.vercel.app",
+      "github": "https://github.com/james1821/honey-flower-shop-V2/"
     }
   ],
   "certifications": [

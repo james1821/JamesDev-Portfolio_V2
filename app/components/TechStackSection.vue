@@ -58,7 +58,7 @@ function onImgError(e: Event, item: TechItem) {
       style="background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(134,194,50,0.03) 0%, transparent 70%)" />
 
     <div class="section-container mb-12">
-      <span class="section-label">// 03. toolkit</span>
+    
       <h2 class="section-title">Tech Stack</h2>
       <div class="w-12 h-0.5 bg-accent mt-4" />
     </div>

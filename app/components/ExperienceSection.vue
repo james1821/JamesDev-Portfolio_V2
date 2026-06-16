@@ -18,27 +18,7 @@ const { track, current, goTo, prev, next, onScroll } = useSlider(() => props.exp
           <h2 class="section-title">Work Experience</h2>
           <div class="w-12 h-0.5 bg-accent mt-4" />
         </div>
-        <div class="flex items-center gap-2 flex-shrink-0">
-          <button @click="prev" :disabled="current === 0"
-            class="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-text-secondary
-                   transition-all duration-200 hover:border-accent hover:text-accent
-                   disabled:opacity-25 disabled:cursor-not-allowed">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-          <span class="font-mono text-xs text-text-muted w-12 text-center tabular-nums">
-            {{ String(current + 1).padStart(2,'0') }} / {{ String(experience.length).padStart(2,'0') }}
-          </span>
-          <button @click="next" :disabled="current === experience.length - 1"
-            class="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-text-secondary
-                   transition-all duration-200 hover:border-accent hover:text-accent
-                   disabled:opacity-25 disabled:cursor-not-allowed">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
+       
       </div>
     </div>
 
