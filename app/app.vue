@@ -71,6 +71,8 @@ useSeoMeta({
 
     <TheFooter :personal="portfolio.personal" @navigate="navigate" />
 
+    <AIAssistantWidget :portfolio="portfolio" />
+
   </div>
 </template>
 

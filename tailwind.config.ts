@@ -21,7 +21,7 @@ export default {
         'accent-glow': 'rgba(134, 194, 50, 0.15)',
         'text-primary': '#e8e8e8',
         'text-secondary': '#e8e8e8',
-        'text-muted': '#444448',
+        'text-muted': '#e8e8e8',
         'border': '#2e2e33',
         'border-accent': 'rgba(134, 194, 50, 0.3)',
       },

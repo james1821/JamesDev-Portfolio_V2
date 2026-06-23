@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Personal } from '~/types'
+import { SparklesIcon } from '@heroicons/vue/24/solid'
 
 const props = defineProps<{ personal: Personal }>()
 const emit = defineEmits<{ (e: 'navigate', page: string): void }>()
+
+const { open: openAIAssistant } = useAIAssistant()
 
 const titles = [
   
@@ -112,6 +115,11 @@ const quickLinks = [
 
          
           <div class="flex flex-wrap gap-3 mb-10">
+            <button type="button" class="btn-outline relative border-accent text-accent" @click="openAIAssistant">
+              <SparklesIcon class="w-4 h-4" />
+              Ask My AI Assistant
+              <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent border-2 border-bg animate-pulse-slow" />
+            </button>
             <a :href="personal.email" class="btn-primary">
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
