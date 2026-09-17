@@ -1,0 +1,81 @@
+<script setup lang="ts">
+const { user, isAdmin, ready, authError, watch: watchAuth, signIn, signOut } = useAuth()
+
+const configured = isFirebaseConfigured()
+if (configured) watchAuth()
+
+const links = [
+  { to: '/admin', label: 'Overview', icon: 'pulse' },
+  { to: '/admin/current', label: 'Currently working on', icon: 'pulse' },
+  { to: '/admin/projects', label: 'Projects', icon: 'layers' },
+  { to: '/admin/experience', label: 'Experience', icon: 'briefcase' },
+  { to: '/admin/skills', label: 'Skills', icon: 'layers' },
+  { to: '/admin/certifications', label: 'Certifications', icon: 'award' },
+  { to: '/admin/settings', label: 'Profile & resume', icon: 'settings' },
+]
+
+useHead({ title: 'Dashboard' })
+</script>
+
+<template>
+  <div class="min-h-screen bg-ink">
+    <div v-if="!configured" class="grid min-h-screen place-items-center px-6">
+      <div class="surface max-w-md p-8 text-center">
+        <h1 class="text-lg font-semibold text-content-strong">Firebase is not configured</h1>
+        <p class="lede mt-3 text-sm">
+          Set the <code class="chip">NUXT_PUBLIC_FIREBASE_*</code> variables and restart the server.
+          The public site still works without them — it falls back to the bundled content.
+        </p>
+      </div>
+    </div>
+
+    <div v-else-if="!ready" class="grid min-h-screen place-items-center">
+      <div class="flex items-center gap-2 text-sm text-content-muted">
+        <span class="h-2 w-2 animate-breathe rounded-full bg-accent" />
+        Checking access…
+      </div>
+    </div>
+
+    <SignIn
+      v-else-if="!user || !isAdmin"
+      :signed-in="Boolean(user)"
+      :email="user?.email ?? ''"
+      :error="authError"
+      @sign-in="signIn"
+      @sign-out="signOut"
+    />
+
+    <div v-else class="flex min-h-screen flex-col lg:flex-row">
+      <aside class="border-b border-line bg-surface lg:w-64 lg:shrink-0 lg:border-b-0 lg:border-r">
+        <div class="flex items-center justify-between gap-3 p-5">
+          <NuxtLink to="/" class="text-sm font-medium text-content-strong">← Back to site</NuxtLink>
+          <button type="button" class="btn-ghost btn-sm" @click="signOut">
+            <AppIcon name="logout" :size="15" />
+            <span class="sr-only">Sign out</span>
+          </button>
+        </div>
+
+        <nav aria-label="Dashboard" class="grid gap-1 px-3 pb-5">
+          <NuxtLink
+            v-for="link in links"
+            :key="link.to"
+            :to="link.to"
+            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-content transition
+                   hover:bg-raised hover:text-content-strong"
+            active-class="bg-raised text-content-strong"
+            :exact="link.to === '/admin'"
+          >
+            <AppIcon :name="link.icon" :size="16" />
+            {{ link.label }}
+          </NuxtLink>
+        </nav>
+      </aside>
+
+      <main class="flex-1 p-5 sm:p-8">
+        <div class="mx-auto max-w-4xl">
+          <slot />
+        </div>
+      </main>
+    </div>
+  </div>
+</template>
