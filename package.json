@@ -1,13 +1,21 @@
 {
-  "name": "JamesDev-Portfolio_V2",
- "private": true,
+  "name": "jamesdev-portfolio",
+  "version": "2.0.0",
+  "private": true,
   "type": "module",
+  "author": "Mark James Espinosa <jamesespinosamark@gmail.com>",
   "scripts": {
-    "build": "nuxt build",
     "dev": "nuxt dev",
+    "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@vueuse/core": "^11.0.0",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1"
   },
   "devDependencies": {
     "@nuxt/image": "^1.8.0",
@@ -15,10 +23,7 @@
     "nuxt": "^4.4.0",
     "typescript": "^5.5.0",
     "vue": "^3.5.0",
-    "vue-router": "^4.4.0"
-  },
-  "dependencies": {
-    "@heroicons/vue": "^2.1.5",
-    "@vueuse/core": "^11.0.0"
+    "vue-router": "^4.4.0",
+    "vue-tsc": "^2.1.10"
   }
 }
