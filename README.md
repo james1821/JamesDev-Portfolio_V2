@@ -96,6 +96,46 @@ Copy `.env.example` to `.env`. Every variable is listed there with where to find
 The site runs without any of them — `/api/content` falls back to
 `server/utils/seedContent.ts` so a fresh clone builds and renders.
 
+## Do you need the service account?
+
+Two variables, `FIREBASE_CLIENT_EMAIL` and `FIREBASE_PRIVATE_KEY`, are what let
+the Nitro server talk to Firestore. Here is exactly what happens without them,
+because `useFirestore()` returns `null` rather than throwing:
+
+| | With the service account | Without |
+|---|---|---|
+| Public pages | Render your Firestore content | Render the bundled starter content — **your CMS edits never appear** |
+| Assistant | 5 per session, 40/day per IP | **No limit at all** — every visitor gets unlimited calls on your key |
+| Dashboard | Works | Works — it uses the web SDK, not this |
+| Uploads | Work | Work — client-side, public bucket |
+
+So the site does not break, which is the trap: it looks fine and quietly serves
+stale content while your assistant burns through your OpenRouter quota. For a
+portfolio with a CMS, you want these set.
+
+### If you would rather not hold a private key
+
+There is a real alternative. Firestore has a REST API that reads
+publicly-readable documents using only the public web API key:
+
+```
+GET https://firestore.googleapis.com/v1/projects/{projectId}/databases/(default)/documents/{collection}?key={publicApiKey}
+```
+
+Every content collection in this project is already `allow read: if true`, so
+rewriting `/api/content` against that endpoint would keep server-side rendering
+and your live content with no private key anywhere.
+
+What it cannot do is the rate limiting. Those counters have to be writable by
+the server and by nobody else, and that is precisely what a service account is
+for. The fallbacks are worse: a signed `httpOnly` cookie is no harder to clear
+than the current `sessionId`, and Nitro's in-memory storage resets on every
+serverless cold start.
+
+Ask and I will do the REST-API swap. The honest recommendation is to set the two
+variables — it is one paste into your host's environment settings, the key never
+touches the repo, and you can rotate it from the Firebase console at any time.
+
 ## The assistant
 
 `POST /api/assistant` with `{ message, sessionId }`.

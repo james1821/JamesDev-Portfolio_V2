@@ -63,10 +63,11 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    firebaseProjectId: process.env.FIREBASE_PROJECT_ID || '',
+    // Falls back to the public project id: the service account belongs to the
+    // same project, so there is no reason to set it twice.
+    firebaseProjectId: process.env.FIREBASE_PROJECT_ID || process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID || '',
     firebaseClientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
     firebasePrivateKey: process.env.FIREBASE_PRIVATE_KEY || '',
-    firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET || '',
     openrouterApiKey: process.env.OPENROUTER_API_KEY || '',
     openrouterModel: process.env.OPENROUTER_MODEL || '',
     assistantQuestionLimit: process.env.ASSISTANT_QUESTION_LIMIT || '5',
