@@ -19,6 +19,6 @@ const { data: content } = await usePortfolio()
     </main>
 
     <SiteFooter v-if="content" :personal="content.personal" />
-    <SiteAssistantWidget v-if="content" :personal="content.personal" />
+    <AssistantWidget v-if="content" :personal="content.personal" />
   </div>
 </template>

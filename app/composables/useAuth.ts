@@ -56,19 +56,26 @@ export function useAuth() {
     if (watching || !import.meta.client) return
     watching = true
 
-    const { auth } = useFirebase()
-    import('firebase/auth').then(({ onAuthStateChanged }) => {
-      onAuthStateChanged(auth, async (current) => {
-        user.value = current
-        try {
-          await resolveAdmin(current)
-        } catch (error) {
-          authError.value = error instanceof Error ? error.message : 'Could not verify admin access.'
-        } finally {
-          ready.value = true
-        }
+    try {
+      const { auth } = useFirebase()
+      import('firebase/auth').then(({ onAuthStateChanged }) => {
+        onAuthStateChanged(auth, async (current) => {
+          user.value = current
+          try {
+            await resolveAdmin(current)
+          } catch (error) {
+            authError.value = error instanceof Error ? error.message : 'Could not verify admin access.'
+          } finally {
+            ready.value = true
+          }
+        })
       })
-    })
+    } catch (error) {
+      // A misconfigured project (bad key, wrong bucket format, etc.) should
+      // show a message on this page, not crash the whole app to the 500 screen.
+      authError.value = error instanceof Error ? error.message : 'Could not reach Firebase.'
+      ready.value = true
+    }
   }
 
   async function signIn() {

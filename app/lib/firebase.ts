@@ -10,31 +10,48 @@ interface FirebaseServices {
   storage: FirebaseStorage
 }
 
-let services: FirebaseServices | null = null
+let app: FirebaseApp | null = null
+let auth: Auth | null = null
+let db: Firestore | null = null
+let storage: FirebaseStorage | null = null
 
-/**
- * Imported only by admin-route code, so Vite keeps the whole Firebase web SDK
- * in a separate chunk that public visitors never download.
- */
-export function useFirebase(): FirebaseServices {
-  if (services) return services
+function getApp(): FirebaseApp {
+  if (app) return app
 
   const { firebase } = useRuntimeConfig().public
-
   if (!firebase.apiKey || !firebase.projectId) {
     throw new Error('Firebase is not configured. Set the NUXT_PUBLIC_FIREBASE_* environment variables.')
   }
 
-  const app = getApps()[0] ?? initializeApp({ ...firebase })
+  app = getApps()[0] ?? initializeApp({ ...firebase })
+  return app
+}
 
-  services = {
-    app,
-    auth: getAuth(app),
-    db: getFirestore(app),
-    storage: getStorage(app),
+/**
+ * Imported only by admin-route code, so Vite keeps the whole Firebase web SDK
+ * in a separate chunk that public visitors never download.
+ *
+ * Each service is a getter evaluated only when the caller actually reads it
+ * (`const { auth } = useFirebase()` never touches `storage`). getStorage()
+ * throws synchronously if the storage bucket is missing or malformed, so
+ * eagerly building all three here would break sign-in for anyone who hasn't
+ * finished configuring Storage yet.
+ */
+export function useFirebase(): FirebaseServices {
+  return {
+    get app() {
+      return getApp()
+    },
+    get auth() {
+      return (auth ??= getAuth(getApp()))
+    },
+    get db() {
+      return (db ??= getFirestore(getApp()))
+    },
+    get storage() {
+      return (storage ??= getStorage(getApp()))
+    },
   }
-
-  return services
 }
 
 export function isFirebaseConfigured(): boolean {

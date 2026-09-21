@@ -4,6 +4,8 @@ const { user, isAdmin, ready, authError, watch: watchAuth, signIn, signOut } = u
 const configured = isFirebaseConfigured()
 if (configured) watchAuth()
 
+const caughtError = ref<Error | null>(null)
+
 const links = [
   { to: '/admin', label: 'Overview', icon: 'pulse' },
   { to: '/admin/current', label: 'Currently working on', icon: 'pulse' },
@@ -73,7 +75,16 @@ useHead({ title: 'Dashboard' })
 
       <main class="flex-1 p-5 sm:p-8">
         <div class="mx-auto max-w-4xl">
-          <slot />
+          <NuxtErrorBoundary @error="(error) => (caughtError = error)">
+            <slot />
+            <template #error="{ error, clearError }">
+              <div class="surface space-y-3 border-danger/30 p-6">
+                <p class="text-sm font-medium text-danger">This section hit an error</p>
+                <p class="whitespace-pre-wrap font-mono text-2xs text-content">{{ error.message }}</p>
+                <button type="button" class="btn-secondary btn-sm" @click="clearError">Try again</button>
+              </div>
+            </template>
+          </NuxtErrorBoundary>
         </div>
       </main>
     </div>
