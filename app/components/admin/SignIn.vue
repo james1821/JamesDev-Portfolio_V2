@@ -20,6 +20,14 @@ defineEmits<{ 'sign-in': []; 'sign-out': [] }>()
         </button>
       </template>
 
+      <template v-else-if="error">
+        <h1 class="mt-5 text-lg font-semibold text-content-strong">Couldn't verify admin access</h1>
+        <p class="lede mx-auto mt-2 whitespace-pre-wrap text-sm">{{ error }}</p>
+        <button type="button" class="btn-secondary mt-6 w-full" @click="$emit('sign-out')">
+          Sign out
+        </button>
+      </template>
+
       <template v-else>
         <h1 class="mt-5 text-lg font-semibold text-content-strong">This account can't manage content</h1>
         <p class="lede mx-auto mt-2 text-sm">
@@ -30,7 +38,7 @@ defineEmits<{ 'sign-in': []; 'sign-out': [] }>()
         </button>
       </template>
 
-      <p v-if="error" class="mt-4 text-sm text-danger">{{ error }}</p>
+      <p v-if="error && !signedIn" class="mt-4 text-sm text-danger">{{ error }}</p>
     </div>
   </div>
 </template>

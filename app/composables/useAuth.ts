@@ -15,6 +15,27 @@ const authError = ref('')
 
 let watching = false
 
+function isPermissionDenied(error: unknown): boolean {
+  return (error as { code?: string })?.code === 'permission-denied'
+}
+
+/**
+ * "Missing or insufficient permissions" is Firestore's own message whenever a
+ * security rule evaluation returns false — it fires just as reliably for a
+ * genuinely-first sign-in as for a later one if firestore.rules was never
+ * published. That's the far more common cause in practice, so lead with it.
+ */
+function translateFirestoreError(error: unknown): Error {
+  if (isPermissionDenied(error)) {
+    return new Error(
+      'Firestore is rejecting this request, which almost always means the security rules in firestore.rules ' +
+        'were never published. In the Firebase console, open Firestore Database → Rules, paste in the contents ' +
+        'of firestore.rules, and click Publish — then reload this page.',
+    )
+  }
+  return error instanceof Error ? error : new Error('Could not verify admin access.')
+}
+
 export function useAuth() {
   /**
    * Admin ownership lives in a single `config/admin` document. Security rules
@@ -30,7 +51,13 @@ export function useAuth() {
     const { db } = useFirebase()
     const { doc, getDoc, setDoc, serverTimestamp } = await import('firebase/firestore')
     const ref = doc(db, 'config', 'admin')
-    const snapshot = await getDoc(ref)
+
+    let snapshot
+    try {
+      snapshot = await getDoc(ref)
+    } catch (error) {
+      throw translateFirestoreError(error)
+    }
 
     if (!snapshot.exists()) {
       const claim: AdminClaim = {
@@ -42,7 +69,8 @@ export function useAuth() {
       try {
         await setDoc(ref, claim)
         isAdmin.value = true
-      } catch {
+      } catch (error) {
+        if (isPermissionDenied(error)) throw translateFirestoreError(error)
         // Lost the race to another sign-in; re-read to get the real owner.
         const retry = await getDoc(ref)
         isAdmin.value = retry.data()?.uid === current.uid
