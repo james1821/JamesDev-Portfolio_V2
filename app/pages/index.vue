@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePortfolio, useActiveWork, useFeaturedProjects } from '../composables/usePortfolio'
+
 const { data: content } = await usePortfolio()
 
 const activeWork = useActiveWork(content)

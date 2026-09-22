@@ -1,4 +1,5 @@
 import type { User } from 'firebase/auth'
+import { useFirebase } from '../lib/firebase'
 
 interface AdminClaim {
   uid: string

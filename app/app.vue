@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePortfolio } from './composables/usePortfolio'
+
 const { data: content } = await usePortfolio()
 
 const siteUrl = useRuntimeConfig().public.siteUrl as string | undefined

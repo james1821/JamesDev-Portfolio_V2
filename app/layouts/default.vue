@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePortfolio } from '../composables/usePortfolio'
+
 const { data: content } = await usePortfolio()
 </script>
 

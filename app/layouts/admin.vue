@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useAuth } from '../composables/useAuth'
+import { isFirebaseConfigured } from '../lib/firebase'
+
 const { user, isAdmin, ready, authError, watch: watchAuth, signIn, signOut } = useAuth()
 
 const configured = isFirebaseConfigured()
