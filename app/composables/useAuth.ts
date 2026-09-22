@@ -1,15 +1,7 @@
 import type { User } from 'firebase/auth'
 import { useFirebase } from '../lib/firebase'
 
-interface AdminClaim {
-  uid: string
-  email: string
-  displayName: string
-  claimedAt: unknown
-}
-
 const user = ref<User | null>(null)
-const isAdmin = ref(false)
 const ready = ref(false)
 const authError = ref('')
 
@@ -20,67 +12,22 @@ function isPermissionDenied(error: unknown): boolean {
 }
 
 /**
- * "Missing or insufficient permissions" is Firestore's own message whenever a
- * security rule evaluation returns false — it fires just as reliably for a
- * genuinely-first sign-in as for a later one if firestore.rules was never
- * published. That's the far more common cause in practice, so lead with it.
+ * The dashboard has exactly one authorised account, matched by email — set in
+ * NUXT_PUBLIC_ADMIN_EMAIL and mirrored in firestore.rules and storage.rules.
+ * There is no claim-on-first-sign-in step and nothing to race: anyone else
+ * who signs in is turned away immediately, with no write ever attempted.
+ *
+ * This check is for UX only. The real enforcement is server-side — Firestore
+ * and Storage reject writes from any other account regardless of what this
+ * function decides, so a compromised or modified client can't grant itself
+ * access.
  */
-function translateFirestoreError(error: unknown): Error {
-  if (isPermissionDenied(error)) {
-    return new Error(
-      'Firestore is rejecting this request, which almost always means the security rules in firestore.rules ' +
-        'were never published. In the Firebase console, open Firestore Database → Rules, paste in the contents ' +
-        'of firestore.rules, and click Publish — then reload this page.',
-    )
-  }
-  return error instanceof Error ? error : new Error('Could not verify admin access.')
-}
+const isAdmin = computed(() => {
+  const adminEmail = useRuntimeConfig().public.adminEmail as string
+  return Boolean(adminEmail && user.value?.email?.toLowerCase() === adminEmail.toLowerCase())
+})
 
 export function useAuth() {
-  /**
-   * Admin ownership lives in a single `config/admin` document. Security rules
-   * allow creating it only when it does not already exist, so the first
-   * account to sign in claims the site and no later account can take it over.
-   */
-  async function resolveAdmin(current: User | null) {
-    if (!current) {
-      isAdmin.value = false
-      return
-    }
-
-    const { db } = useFirebase()
-    const { doc, getDoc, setDoc, serverTimestamp } = await import('firebase/firestore')
-    const ref = doc(db, 'config', 'admin')
-
-    let snapshot
-    try {
-      snapshot = await getDoc(ref)
-    } catch (error) {
-      throw translateFirestoreError(error)
-    }
-
-    if (!snapshot.exists()) {
-      const claim: AdminClaim = {
-        uid: current.uid,
-        email: current.email ?? '',
-        displayName: current.displayName ?? '',
-        claimedAt: serverTimestamp(),
-      }
-      try {
-        await setDoc(ref, claim)
-        isAdmin.value = true
-      } catch (error) {
-        if (isPermissionDenied(error)) throw translateFirestoreError(error)
-        // Lost the race to another sign-in; re-read to get the real owner.
-        const retry = await getDoc(ref)
-        isAdmin.value = retry.data()?.uid === current.uid
-      }
-      return
-    }
-
-    isAdmin.value = snapshot.data()?.uid === current.uid
-  }
-
   function watch() {
     if (watching || !import.meta.client) return
     watching = true
@@ -88,16 +35,19 @@ export function useAuth() {
     try {
       const { auth } = useFirebase()
       import('firebase/auth').then(({ onAuthStateChanged }) => {
-        onAuthStateChanged(auth, async (current) => {
-          user.value = current
-          try {
-            await resolveAdmin(current)
-          } catch (error) {
-            authError.value = error instanceof Error ? error.message : 'Could not verify admin access.'
-          } finally {
+        onAuthStateChanged(
+          auth,
+          (current) => {
+            user.value = current
             ready.value = true
-          }
-        })
+          },
+          (error) => {
+            authError.value = isPermissionDenied(error)
+              ? 'Firebase Authentication rejected this request. Check that Google sign-in is enabled for this project.'
+              : error.message
+            ready.value = true
+          },
+        )
       })
     } catch (error) {
       // A misconfigured project (bad key, wrong bucket format, etc.) should
@@ -125,7 +75,6 @@ export function useAuth() {
     const { auth } = useFirebase()
     const { signOut } = await import('firebase/auth')
     await signOut(auth)
-    isAdmin.value = false
   }
 
   return { user, isAdmin, ready, authError, watch, signIn, signOut: signOutUser }

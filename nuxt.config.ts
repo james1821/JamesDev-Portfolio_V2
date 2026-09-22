@@ -75,6 +75,7 @@ export default defineNuxtConfig({
 
     public: {
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',
+      adminEmail: process.env.NUXT_PUBLIC_ADMIN_EMAIL || '',
       firebase: {
         apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY || '',
         authDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',

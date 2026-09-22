@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import type { AssistantReply, PortfolioContent } from '#shared/types'
 import { buildSystemPrompt } from '../utils/assistantPrompt'
 import { seedContent } from '../utils/seedContent'
+import { answerLocally } from '../utils/localAssistant'
 
 /**
  * Free OpenRouter endpoints, tried in order. The free roster rotates, so a
@@ -86,11 +87,15 @@ export default defineEventHandler(async (event): Promise<AssistantReply> => {
 
   const remaining = Math.max(0, limit - used)
 
+  const content = await $fetch<PortfolioContent>('/api/content').catch(() => seedContent)
+
+  // No key configured, or every model in the chain failed — answer from the
+  // live content directly rather than making the visitor wait on a retry.
+  // This path never calls out to anything, so it can't itself be "busy."
   if (!config.openrouterApiKey) {
-    fail('unavailable', 'The assistant is not configured yet. Email me and I will reply directly.', remaining, 503)
+    return { answer: answerLocally(message, content), remaining, model: 'local' }
   }
 
-  const content = await $fetch<PortfolioContent>('/api/content').catch(() => seedContent)
   const notesDoc = db ? await db.doc('config/assistant').get().catch(() => null) : null
   const systemPrompt = buildSystemPrompt(content, notesDoc?.data()?.resumeText ?? '')
 
@@ -128,6 +133,6 @@ export default defineEventHandler(async (event): Promise<AssistantReply> => {
     }
   }
 
-  fail('unavailable', 'The assistant is busy right now. Try again shortly.', remaining, 503)
-  throw new Error('unreachable')
+  // Every model was unavailable. Same guarantee as the no-key case above.
+  return { answer: answerLocally(message, content), remaining, model: 'local' }
 })

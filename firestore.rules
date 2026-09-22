@@ -3,25 +3,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // The admin claim. Anyone signed in may create it, but ONLY while it does
-    // not already exist — so the first Google account to reach the dashboard
-    // owns the site permanently. It can never be updated or deleted from the
-    // client, which is what makes "sole admin" hold.
-    match /config/admin {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
-                    && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if false;
-    }
-
+    // Sole admin, fixed by email — no claim step, nothing to race. Firebase
+    // Auth ID tokens carry a verified email claim that Security Rules can
+    // read directly; this is the actual enforcement, not the client-side
+    // check in useAuth.ts, which exists only for UX.
+    //
+    // Keep this in sync with NUXT_PUBLIC_ADMIN_EMAIL.
     function isAdmin() {
       return request.auth != null
-             && exists(/databases/$(database)/documents/config/admin)
-             && get(/databases/$(database)/documents/config/admin).data.uid == request.auth.uid;
+             && request.auth.token.email_verified == true
+             && request.auth.token.email == 'jamesespinosamark@gmail.com';
     }
 
-    // Public content. The site reads it server-side with the Admin SDK, which
-    // bypasses rules; these reads are for the dashboard's live listeners.
     match /config/{document} {
       allow read: if true;
       allow write: if isAdmin();

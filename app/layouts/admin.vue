@@ -7,6 +7,8 @@ const { user, isAdmin, ready, authError, watch: watchAuth, signIn, signOut } = u
 const configured = isFirebaseConfigured()
 if (configured) watchAuth()
 
+const adminEmail = useRuntimeConfig().public.adminEmail as string
+
 const caughtError = ref<Error | null>(null)
 
 const links = [
@@ -30,6 +32,17 @@ useHead({ title: 'Dashboard' })
         <p class="lede mt-3 text-sm">
           Set the <code class="chip">NUXT_PUBLIC_FIREBASE_*</code> variables and restart the server.
           The public site still works without them — it falls back to the bundled content.
+        </p>
+      </div>
+    </div>
+
+    <div v-else-if="!adminEmail" class="grid min-h-screen place-items-center px-6">
+      <div class="surface max-w-md p-8 text-center">
+        <h1 class="text-lg font-semibold text-content-strong">No admin account is set</h1>
+        <p class="lede mt-3 text-sm">
+          Set <code class="chip">NUXT_PUBLIC_ADMIN_EMAIL</code> to your Google account's email, and make sure it
+          matches the email hardcoded in <code class="chip">firestore.rules</code> and
+          <code class="chip">storage.rules</code>. Republish both rule files, then restart the server.
         </p>
       </div>
     </div>

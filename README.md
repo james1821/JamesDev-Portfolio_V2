@@ -32,30 +32,38 @@ someone bypassed the UI entirely, Firestore would reject the write.
 
 ## Admin ownership
 
-Ownership lives in a single Firestore document, `config/admin`:
-
-```js
-{ uid, email, displayName, claimedAt }
-```
-
-The rule that makes "sole admin" hold:
+The dashboard has exactly one authorised account, matched by email — no
+claim step, nothing to race. The enforcement lives in the rules, not the app:
 
 ```
-allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
-allow update, delete: if false;
+function isAdmin() {
+  return request.auth != null
+         && request.auth.token.email_verified == true
+         && request.auth.token.email == 'jamesespinosamark@gmail.com';
+}
 ```
 
-Create is permitted only while the document does not exist. The first Google
-account to open the dashboard writes it and owns the site. Every later account
-signs in successfully but fails the `isAdmin()` check and sees a refusal screen.
-The claim cannot be overwritten from any client — to transfer ownership you must
-delete the document from the Firebase console.
+Firebase Auth ID tokens carry a verified email claim that Security Rules read
+directly — `request.auth.token.email`. Any other Google account can sign in
+successfully (Firebase Authentication doesn't know about this restriction) but
+every read and write it attempts to `config/*`, `projects`, `experience`,
+`skills`, `currentWork` and `certifications` is rejected server-side.
+
+`useAuth.ts` also checks the email client-side, against
+`NUXT_PUBLIC_ADMIN_EMAIL`, purely for a fast, friendly "this isn't your
+account" screen. That check is not the real security boundary and could be
+bypassed by anyone editing the client bundle — the rules above are what
+actually matters, which is why the email is hardcoded in both rule files
+rather than read from an environment variable Security Rules can't see.
+
+**To change the admin account:** update the email in `firestore.rules`,
+`storage.rules`, and `NUXT_PUBLIC_ADMIN_EMAIL`, then republish both rule
+files. All three must match.
 
 ## Firestore collections
 
 | Path | Written by | Contents |
 |---|---|---|
-| `config/admin` | First sign-in, once | The owning account's uid |
 | `config/site` | Admin | Name, role, summary, photo, email, links, resume URL, location, availability |
 | `config/assistant` | Admin | `resumeText` — extra knowledge for the assistant |
 | `projects` | Admin | `title, description, image, tech[], demo, github, featured, order` |
@@ -86,7 +94,8 @@ Copy `.env.example` to `.env`. Every variable is listed there with where to find
 **Public** (safe to expose — Security Rules do the enforcing):
 `NUXT_PUBLIC_FIREBASE_API_KEY`, `NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN`,
 `NUXT_PUBLIC_FIREBASE_PROJECT_ID`, `NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET`,
-`NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, `NUXT_PUBLIC_FIREBASE_APP_ID`
+`NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, `NUXT_PUBLIC_FIREBASE_APP_ID`,
+`NUXT_PUBLIC_ADMIN_EMAIL`
 
 **Server-only** (never commit):
 `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`,
@@ -154,6 +163,22 @@ touches the repo, and you can rotate it from the Firebase console at any time.
 The chain matters: OpenRouter's free roster rotates without notice, so a single
 hard-coded model is a liability. Set `OPENROUTER_MODEL` to pin a preferred model
 at the front of the chain.
+
+### Local fallback
+
+If `OPENROUTER_API_KEY` isn't set, or every model in the chain fails, the
+server answers from a deterministic keyword matcher in
+`server/utils/localAssistant.ts` instead of returning an error. It pattern-matches
+the question against the same live content (experience, skills, projects,
+contact, resume, availability, certifications, current work) and returns a
+templated answer built directly from it — no network call, so it can't itself
+be unavailable. The response is marked `"model": "local"` so you can tell
+which tier answered, though the UI doesn't currently surface that distinction
+to visitors.
+
+This means the assistant always says something useful, even with no
+OpenRouter key configured at all — the free-tier AI is an upgrade over the
+local bot, not a requirement for the assistant to function.
 
 ## Local development
 

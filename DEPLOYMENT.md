@@ -34,8 +34,12 @@ firebase use --add            # select your project
 firebase deploy --only firestore:rules,storage:rules
 ```
 
-**Publish these before the first sign-in.** Without them Firestore starts in
-locked mode and the admin claim cannot be written.
+**Publish these before you ever sign in.** Both rule files check
+`request.auth.token.email` against a hardcoded address — open
+`firestore.rules` and `storage.rules` and change `jamesespinosamark@gmail.com`
+to your own Google account's email in both files before publishing. Without
+published rules, Firestore starts in locked mode and every request is denied,
+including your own.
 
 ## 4. Get an OpenRouter key
 
@@ -74,11 +78,11 @@ Firebase Authentication → Settings → **Authorised domains** → add your
 production domain. Google sign-in fails silently without this, and it is the
 single most common cause of a popup that opens and immediately closes.
 
-## 7. Claim the dashboard
+## 7. Sign in
 
-Visit `https://your-domain.com/admin` and sign in with the Google account that
-should own the site. **The first account to do this owns it permanently** — do
-this yourself before sharing the URL.
+Visit `https://your-domain.com/admin` and sign in with the Google account you
+put in `NUXT_PUBLIC_ADMIN_EMAIL` and both rule files. Any other account is
+turned away automatically — there's no claiming step to race.
 
 Then on the overview screen press **Import starter content** to populate
 Firestore, and edit from there.
@@ -86,7 +90,7 @@ Firestore, and edit from there.
 ## Post-deploy checks
 
 - [ ] `/` renders your content, not the starter fallback
-- [ ] `/admin` refuses a second Google account
+- [ ] `/admin` refuses a Google account other than yours
 - [ ] Uploading a JPG in Projects returns a `firebasestorage.googleapis.com` URL
 - [ ] Replacing the resume changes every Resume button
 - [ ] The assistant answers, and cuts off after five questions
@@ -94,8 +98,9 @@ Firestore, and edit from there.
 
 ## Transferring ownership
 
-There is deliberately no UI for this. Delete `config/admin` in the Firestore
-console; the next Google account to open `/admin` claims the site.
+Update the email in `firestore.rules`, `storage.rules` and
+`NUXT_PUBLIC_ADMIN_EMAIL`, then republish both rule files. All three must
+match, or the new account will sign in but every write will be rejected.
 
 ## Optional: correcting the Git author email
 
