@@ -4,6 +4,10 @@ import type { AssistantReply, PortfolioContent } from '#shared/types'
 import { buildSystemPrompt } from '../utils/assistantPrompt'
 import { seedContent } from '../utils/seedContent'
 <<<<<<< HEAD
+import { useFirestore } from '../utils/firebaseAdmin'
+=======
+<<<<<<< HEAD
+>>>>>>> origin/main
 import { answerLocally } from '../utils/localAssistant'
 =======
 >>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7

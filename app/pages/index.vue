@@ -45,7 +45,7 @@ useSeoMeta({ title: '' })
       </div>
     </section>
 
-    <section v-if="latestRole" class="shell py-14">
+  
       <SectionHeading title="Where I work" to="/experience" link-label="Full history" />
       <div class="surface p-6 sm:p-7">
         <div class="flex flex-wrap items-center justify-between gap-4">
@@ -62,7 +62,7 @@ useSeoMeta({ title: '' })
         </div>
         <p class="lede mt-5">{{ latestRole.description }}</p>
       </div>
-    </section>
+    </section> -->
 
     <section v-if="topSkills.length" class="shell py-14">
       <SectionHeading title="Working stack" to="/stack" link-label="Everything I use" />
