@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import type { AssistantReply, PortfolioContent } from '#shared/types'
 import { buildSystemPrompt } from '../utils/assistantPrompt'
 import { seedContent } from '../utils/seedContent'
+import { useFirestore } from '../utils/firebaseAdmin'
 import { answerLocally } from '../utils/localAssistant'
 
 /**

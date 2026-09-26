@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Personal } from '#shared/types'
 import { useConfigDoc } from '../../composables/useConfigDoc'
-import { useUpload } from '../../composables/useUpload'
 
 definePageMeta({ layout: 'admin' })
 
@@ -12,20 +11,6 @@ const EMPTY: Personal & { resumeText?: string } = {
 
 const site = useConfigDoc('site', EMPTY)
 const assistant = useConfigDoc('assistant', { resumeText: '' })
-
-const { uploadResume, uploading, progress, error: uploadError } = useUpload()
-const resumePicker = ref<HTMLInputElement | null>(null)
-
-async function onResumePick(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) return
-  try {
-    site.data.value.resume = await uploadResume(file)
-    await site.save()
-  } catch {
-    // useUpload reports the reason through uploadError.
-  }
-}
 </script>
 
 <template>
@@ -94,35 +79,51 @@ async function onResumePick(event: Event) {
 
     <section>
       <h2 class="text-lg font-semibold text-content-strong">Resume</h2>
-      <p class="lede mt-1 text-sm">Uploading a new PDF replaces the file behind every Resume button on the site.</p>
+      <p class="lede mt-1 text-sm">The link behind every Resume button on the site.</p>
 
-      <div class="surface mt-5 space-y-4 p-6">
+      <form class="surface mt-5 space-y-4 p-6" @submit.prevent="site.save()">
         <div class="flex flex-wrap items-center gap-3">
           <span class="grid h-11 w-11 place-items-center rounded-xl border border-line bg-raised text-accent">
             <AppIcon name="file" :size="18" />
           </span>
           <div class="min-w-0 flex-1">
-            <p class="truncate text-sm text-content-strong">
-              {{ site.data.value.resume || 'No resume uploaded yet' }}
-            </p>
-            <p class="text-2xs text-content-muted">PDF, up to 10 MB.</p>
+            <label for="s-resume" class="field-label">Resume link</label>
+            <input
+              id="s-resume"
+              v-model.trim="site.data.value.resume"
+              type="text"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+              class="field"
+              placeholder="/resume/YourName_Resume.pdf or https://…"
+            />
           </div>
-          <a v-if="site.data.value.resume" :href="site.data.value.resume" target="_blank" rel="noopener" class="btn-ghost btn-sm">
+          <a
+            v-if="site.data.value.resume"
+            :href="site.data.value.resume"
+            target="_blank"
+            rel="noopener"
+            class="btn-ghost btn-sm self-end"
+          >
             <AppIcon name="external" :size="15" />
             Open
           </a>
-          <button type="button" class="btn-secondary btn-sm" :disabled="uploading" @click="resumePicker?.click()">
-            <AppIcon name="download" :size="15" />
-            {{ uploading ? `Uploading ${progress}%` : 'Replace' }}
-          </button>
         </div>
 
-        <input ref="resumePicker" type="file" accept="application/pdf" class="sr-only" @change="onResumePick" />
-        <div v-if="uploading" class="h-1 overflow-hidden rounded-full bg-line">
-          <div class="h-full bg-accent transition-all" :style="{ width: `${progress}%` }" />
-        </div>
-        <p v-if="uploadError" class="text-2xs text-danger">{{ uploadError }}</p>
-      </div>
+        <p class="text-2xs text-content-muted">
+          Easiest: put the PDF in your project's public/resume folder and enter /resume/FileName.pdf. Or paste a
+          public link, such as a Google Drive share link set to "Anyone with the link".
+        </p>
+
+        <p v-if="site.error.value" class="text-sm text-danger">{{ site.error.value }}</p>
+        <p v-else-if="site.message.value" class="text-sm text-accent-soft">{{ site.message.value }}</p>
+
+        <button type="submit" class="btn-primary btn-sm" :disabled="site.saving.value">
+          <AppIcon name="check" :size="15" />
+          {{ site.saving.value ? 'Saving…' : 'Save resume link' }}
+        </button>
+      </form>
     </section>
 
     <section>

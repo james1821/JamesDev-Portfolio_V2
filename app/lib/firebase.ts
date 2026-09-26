@@ -1,6 +1,6 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app'
 import { getAuth, type Auth } from 'firebase/auth'
-import { getFirestore, type Firestore } from 'firebase/firestore'
+import { getFirestore, initializeFirestore, type Firestore } from 'firebase/firestore'
 import { getStorage, type FirebaseStorage } from 'firebase/storage'
 
 interface FirebaseServices {
@@ -46,7 +46,17 @@ export function useFirebase(): FirebaseServices {
       return (auth ??= getAuth(getApp()))
     },
     get db() {
-      return (db ??= getFirestore(getApp()))
+      if (!db) {
+        try {
+          // Falls back to HTTP long-polling when the streaming connection is
+          // blocked or mangled by an extension, proxy, VPN or antivirus.
+          db = initializeFirestore(getApp(), { experimentalAutoDetectLongPolling: true })
+        } catch {
+          // Already initialised (e.g. after a hot reload) — reuse that instance.
+          db = getFirestore(getApp())
+        }
+      }
+      return db
     },
     get storage() {
       return (storage ??= getStorage(getApp()))
@@ -58,3 +68,4 @@ export function isFirebaseConfigured(): boolean {
   const { firebase } = useRuntimeConfig().public
   return Boolean(firebase.apiKey && firebase.projectId)
 }
+  

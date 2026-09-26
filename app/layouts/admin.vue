@@ -11,6 +11,11 @@ const adminEmail = useRuntimeConfig().public.adminEmail as string
 
 const caughtError = ref<Error | null>(null)
 
+function onBoundaryError(error: unknown) {
+  caughtError.value = error as Error
+  console.error('[admin] section error', error)
+}
+
 const links = [
   { to: '/admin', label: 'Overview', icon: 'pulse' },
   { to: '/admin/current', label: 'Currently working on', icon: 'pulse' },
@@ -91,12 +96,16 @@ useHead({ title: 'Dashboard' })
 
       <main class="flex-1 p-5 sm:p-8">
         <div class="mx-auto max-w-4xl">
-          <NuxtErrorBoundary @error="(error) => (caughtError = error)">
+          <NuxtErrorBoundary @error="onBoundaryError">
             <slot />
             <template #error="{ error, clearError }">
               <div class="surface space-y-3 border-danger/30 p-6">
                 <p class="text-sm font-medium text-danger">This section hit an error</p>
                 <p class="whitespace-pre-wrap font-mono text-2xs text-content">{{ error.message }}</p>
+                <details open>
+                  <summary class="cursor-pointer text-2xs text-content-muted">Technical details — copy this when reporting the problem</summary>
+                  <pre class="mt-2 max-h-72 overflow-auto whitespace-pre-wrap break-all font-mono text-2xs text-content-muted">{{ error.stack }}</pre>
+                </details>
                 <button type="button" class="btn-secondary btn-sm" @click="clearError">Try again</button>
               </div>
             </template>
