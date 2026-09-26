@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Personal } from '#shared/types'
+<<<<<<< HEAD
 import { useAssistant } from '../../composables/useAssistant'
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 
 const props = defineProps<{ personal: Personal }>()
 

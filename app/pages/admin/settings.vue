@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import type { Personal } from '#shared/types'
+<<<<<<< HEAD
 import { useConfigDoc } from '../../composables/useConfigDoc'
+<<<<<<< HEAD
+=======
+import { useUpload } from '../../composables/useUpload'
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
+>>>>>>> origin/main
 
 definePageMeta({ layout: 'admin' })
 

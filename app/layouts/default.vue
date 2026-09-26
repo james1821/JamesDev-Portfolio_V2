@@ -1,6 +1,9 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { usePortfolio } from '../composables/usePortfolio'
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const { data: content } = await usePortfolio()
 </script>
 
@@ -21,6 +24,10 @@ const { data: content } = await usePortfolio()
     </main>
 
     <SiteFooter v-if="content" :personal="content.personal" />
+<<<<<<< HEAD
     <AssistantWidget v-if="content" :personal="content.personal" />
+=======
+    <SiteAssistantWidget v-if="content" :personal="content.personal" />
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
   </div>
 </template>

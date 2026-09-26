@@ -1,4 +1,12 @@
 <script setup lang="ts">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+import { useUpload } from '../../composables/useUpload'
+
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
+>>>>>>> origin/main
 const props = defineProps<{ id: string; modelValue: string }>()
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 

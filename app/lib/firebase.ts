@@ -10,6 +10,7 @@ interface FirebaseServices {
   storage: FirebaseStorage
 }
 
+<<<<<<< HEAD
 let app: FirebaseApp | null = null
 let auth: Auth | null = null
 let db: Firestore | null = null
@@ -26,10 +27,14 @@ function getApp(): FirebaseApp {
   app = getApps()[0] ?? initializeApp({ ...firebase })
   return app
 }
+=======
+let services: FirebaseServices | null = null
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 
 /**
  * Imported only by admin-route code, so Vite keeps the whole Firebase web SDK
  * in a separate chunk that public visitors never download.
+<<<<<<< HEAD
  *
  * Each service is a getter evaluated only when the caller actually reads it
  * (`const { auth } = useFirebase()` never touches `storage`). getStorage()
@@ -62,6 +67,28 @@ export function useFirebase(): FirebaseServices {
       return (storage ??= getStorage(getApp()))
     },
   }
+=======
+ */
+export function useFirebase(): FirebaseServices {
+  if (services) return services
+
+  const { firebase } = useRuntimeConfig().public
+
+  if (!firebase.apiKey || !firebase.projectId) {
+    throw new Error('Firebase is not configured. Set the NUXT_PUBLIC_FIREBASE_* environment variables.')
+  }
+
+  const app = getApps()[0] ?? initializeApp({ ...firebase })
+
+  services = {
+    app,
+    auth: getAuth(app),
+    db: getFirestore(app),
+    storage: getStorage(app),
+  }
+
+  return services
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 }
 
 export function isFirebaseConfigured(): boolean {

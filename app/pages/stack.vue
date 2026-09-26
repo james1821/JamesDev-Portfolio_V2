@@ -1,6 +1,9 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { usePortfolio } from '../composables/usePortfolio'
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const { data: content } = await usePortfolio()
 
 const grouped = computed(() => {
