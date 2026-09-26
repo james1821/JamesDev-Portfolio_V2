@@ -1,16 +1,22 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { useAuth } from '../composables/useAuth'
 import { isFirebaseConfigured } from '../lib/firebase'
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const { user, isAdmin, ready, authError, watch: watchAuth, signIn, signOut } = useAuth()
 
 const configured = isFirebaseConfigured()
 if (configured) watchAuth()
 
+<<<<<<< HEAD
 const adminEmail = useRuntimeConfig().public.adminEmail as string
 
 const caughtError = ref<Error | null>(null)
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const links = [
   { to: '/admin', label: 'Overview', icon: 'pulse' },
   { to: '/admin/current', label: 'Currently working on', icon: 'pulse' },
@@ -36,6 +42,7 @@ useHead({ title: 'Dashboard' })
       </div>
     </div>
 
+<<<<<<< HEAD
     <div v-else-if="!adminEmail" class="grid min-h-screen place-items-center px-6">
       <div class="surface max-w-md p-8 text-center">
         <h1 class="text-lg font-semibold text-content-strong">No admin account is set</h1>
@@ -47,6 +54,8 @@ useHead({ title: 'Dashboard' })
       </div>
     </div>
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
     <div v-else-if="!ready" class="grid min-h-screen place-items-center">
       <div class="flex items-center gap-2 text-sm text-content-muted">
         <span class="h-2 w-2 animate-breathe rounded-full bg-accent" />
@@ -91,6 +100,7 @@ useHead({ title: 'Dashboard' })
 
       <main class="flex-1 p-5 sm:p-8">
         <div class="mx-auto max-w-4xl">
+<<<<<<< HEAD
           <NuxtErrorBoundary @error="(error) => (caughtError = error)">
             <slot />
             <template #error="{ error, clearError }">
@@ -101,6 +111,9 @@ useHead({ title: 'Dashboard' })
               </div>
             </template>
           </NuxtErrorBoundary>
+=======
+          <slot />
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
         </div>
       </main>
     </div>

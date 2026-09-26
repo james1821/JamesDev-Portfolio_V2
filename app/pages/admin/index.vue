@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { PortfolioContent } from '#shared/types'
+<<<<<<< HEAD
 import { useAuth } from '../../composables/useAuth'
 import { useFirebase } from '../../lib/firebase'
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 
 definePageMeta({ layout: 'admin' })
 

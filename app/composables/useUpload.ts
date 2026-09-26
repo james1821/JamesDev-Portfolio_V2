@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import { useFirebase } from '../lib/firebase'
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const MAX_RESUME_BYTES = 10 * 1024 * 1024

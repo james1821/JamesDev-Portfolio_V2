@@ -1,8 +1,13 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { usePortfolio } from './composables/usePortfolio'
 
 const { data: content } = await usePortfolio()
 
+=======
+const { data: content } = await usePortfolio()
+
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 const siteUrl = useRuntimeConfig().public.siteUrl as string | undefined
 
 useSeoMeta({
