@@ -14,13 +14,9 @@ const routes = [
 const menuOpen = ref(false)
 const lifted = ref(false)
 
-const initials = computed(() =>
-  props.personal.name
-    .split(/\s+/)
-    .map((word) => word[0])
-    .join('')
-    .slice(0, 3),
-)
+// The site's mark. Deliberately fixed, not derived from personal.name — a
+// logo shouldn't silently change if the display name is edited in settings.
+const LOGO_MARK = 'MJE'
 
 function onScroll() {
   lifted.value = window.scrollY > 8
@@ -42,7 +38,7 @@ watch(() => useRoute().fullPath, () => (menuOpen.value = false))
         to="/"
         class="flex items-center gap-2.5 font-mono text-sm font-bold tracking-tight text-content-strong"
       >
-        <span class="grid h-8 w-8 place-items-center rounded-lg bg-accent text-ink">{{ initials }}</span>
+        <span class="grid h-8 w-8 place-items-center rounded-lg bg-accent text-ink text-xs font-bold">{{ LOGO_MARK }}</span>
         <span class="hidden sm:inline">{{ personal.name }}</span>
       </NuxtLink>
 
