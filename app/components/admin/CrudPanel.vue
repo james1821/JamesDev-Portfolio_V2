@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CollectionName } from '#shared/types'
 import type { FieldSchema } from './FormField.vue'
+import { useAdminCollection } from '../../composables/useAdminCollection'
 
 interface Record {
   id: string
@@ -21,8 +22,14 @@ const props = defineProps<{
   max?: number
 }>()
 
-const { items, loading, error, create, update, remove, move, nextOrder } =
-  useAdminCollection<Record>(props.collection)
+const collectionState = useAdminCollection<Record>(props.collection)
+if (!collectionState || !('items' in collectionState)) {
+  console.error('[CrudPanel] useAdminCollection returned an unexpected shape:', collectionState)
+}
+const { loading, error, create, update, remove, move, nextOrder } = collectionState
+
+// Always an array, so the template can never read `.length` of undefined.
+const items = computed<Record[]>(() => collectionState.items?.value ?? [])
 
 const editing = ref<Record | null>(null)
 const formOpen = ref(false)

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import { useFirebase } from '../lib/firebase'
 
+=======
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 /** Read/write helper for the single-document `config/*` records. */
 export function useConfigDoc<T extends Record<string, unknown>>(name: string, fallback: T) {
   const data = ref<T>({ ...fallback }) as Ref<T>

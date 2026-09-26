@@ -27,3 +27,8 @@ logs
 .firebase
 firebase-debug.log
 *serviceAccount*.json
+<<<<<<< HEAD
+=======
+/README.md
+/DEPLOYMENT.md
+>>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
