@@ -1,8 +1,5 @@
 import type { CollectionName } from '#shared/types'
-<<<<<<< HEAD
 import { useFirebase } from '../lib/firebase'
-=======
->>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 
 interface Orderable {
   id: string

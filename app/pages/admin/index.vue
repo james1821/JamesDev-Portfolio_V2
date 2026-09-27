@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { PortfolioContent } from '#shared/types'
-<<<<<<< HEAD
 import { useAuth } from '../../composables/useAuth'
 import { useFirebase } from '../../lib/firebase'
-=======
->>>>>>> b87402ff7d3b4eb2de4ce096e6bfc16a4c5f65e7
 
 definePageMeta({ layout: 'admin' })
 
@@ -14,7 +11,6 @@ const counts = ref<Record<string, number>>({})
 const seeding = ref(false)
 const seedMessage = ref('')
 const loading = ref(true)
-const loadError = ref('')
 
 const COLLECTIONS = ['currentWork', 'projects', 'experience', 'skills', 'certifications'] as const
 
@@ -27,26 +23,13 @@ const LABELS: Record<string, string> = {
 }
 
 async function loadCounts() {
-  loadError.value = ''
-  try {
-    const { db } = useFirebase()
-    const { collection, getCountFromServer } = await import('firebase/firestore')
-    const results = await Promise.all(
-      COLLECTIONS.map(async (name) => [name, (await getCountFromServer(collection(db, name))).data().count] as const),
-    )
-    counts.value = Object.fromEntries(results)
-  } catch (error) {
-    const code = (error as { code?: string })?.code
-    loadError.value =
-      code === 'permission-denied'
-        ? 'Firestore refused the read. Publish firestore.rules to this project and make sure you are signed in with the email listed in it.'
-        : error instanceof Error
-          ? error.message
-          : 'Could not load the collection counts.'
-    console.error('[admin] loadCounts failed', error)
-  } finally {
-    loading.value = false
-  }
+  const { db } = useFirebase()
+  const { collection, getCountFromServer } = await import('firebase/firestore')
+  const results = await Promise.all(
+    COLLECTIONS.map(async (name) => [name, (await getCountFromServer(collection(db, name))).data().count] as const),
+  )
+  counts.value = Object.fromEntries(results)
+  loading.value = false
 }
 
 /** One-time helper that copies the bundled starter records into Firestore. */
@@ -61,7 +44,7 @@ async function seed() {
 
     batch.set(doc(db, 'config', 'site'), content.personal, { merge: true })
     for (const name of COLLECTIONS) {
-      for (const record of content[name] ?? []) {
+      for (const record of content[name]) {
         const { id, ...rest } = record
         batch.set(doc(collection(db, name), id), rest, { merge: true })
       }
@@ -77,9 +60,7 @@ async function seed() {
   }
 }
 
-const isEmpty = computed(
-  () => !loadError.value && Object.values(counts.value).every((n) => n === 0),
-)
+const isEmpty = computed(() => Object.values(counts.value).every((n) => n === 0))
 
 onMounted(loadCounts)
 </script>
@@ -94,8 +75,6 @@ onMounted(loadCounts)
         You own this dashboard. Changes appear on the public site within five minutes, or immediately after a redeploy.
       </p>
     </div>
-
-    <p v-if="loadError" class="surface border-danger/30 p-5 text-sm text-danger">{{ loadError }}</p>
 
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       <NuxtLink

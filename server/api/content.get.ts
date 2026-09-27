@@ -1,7 +1,6 @@
 import type { Firestore } from 'firebase-admin/firestore'
 import type { PortfolioContent } from '#shared/types'
 import { seedContent } from '../utils/seedContent'
-import { useFirestore } from '../utils/firebaseAdmin'
 
 const COLLECTIONS = ['skills', 'experience', 'projects', 'currentWork', 'certifications'] as const
 
