@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Sole admin, fixed by email — no claim step, nothing to race. Firebase
+    // Auth ID tokens carry a verified email claim that Security Rules can
+    // read directly; this is the actual enforcement, not the client-side
+    // check in useAuth.ts, which exists only for UX.
+    //
+    // Keep this in sync with NUXT_PUBLIC_ADMIN_EMAIL.
+    function isAdmin() {
+      return request.auth != null
+             && request.auth.token.email_verified == true
+             && request.auth.token.email == 'jamesespinosamark@gmail.com';
+    }
+
+    match /config/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /projects/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /experience/{id}     { allow read: if true; allow write: if isAdmin(); }
+    match /skills/{id}         { allow read: if true; allow write: if isAdmin(); }
+    match /currentWork/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /certifications/{id} { allow read: if true; allow write: if isAdmin(); }
+
+    // Assistant quotas are written only by the server via the Admin SDK. No
+    // client may read or touch them, so a visitor cannot reset their own count.
+    match /rateLimits/{id}      { allow read, write: if false; }
+    match /rateLimitsByIp/{id}  { allow read, write: if false; }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}
