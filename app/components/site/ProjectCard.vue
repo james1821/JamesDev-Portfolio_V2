@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { Project } from '#shared/types'
+import type { Project, Skill } from '#shared/types'
+import { findTechIcon } from '../../utils/techIcon'
 
-defineProps<{ project: Project; eager?: boolean }>()
+const props = defineProps<{ project: Project; skills?: Skill[]; eager?: boolean }>()
 </script>
 
 <template>
@@ -24,7 +25,18 @@ defineProps<{ project: Project; eager?: boolean }>()
       <p class="flex-1 text-sm leading-relaxed text-content">{{ project.description }}</p>
 
       <ul class="flex flex-wrap gap-1.5" aria-label="Technologies used">
-        <li v-for="tech in project.tech" :key="tech" class="chip">{{ tech }}</li>
+        <li v-for="tech in project.tech" :key="tech" class="chip">
+          <img
+            v-if="findTechIcon(tech, props.skills)"
+            :src="findTechIcon(tech, props.skills)"
+            :alt="`${tech} logo`"
+            width="14"
+            height="14"
+            loading="lazy"
+            class="mr-1 h-3.5 w-3.5 object-contain"
+          />
+          {{ tech }}
+        </li>
       </ul>
 
       <div v-if="project.demo || project.github" class="flex gap-2 pt-1">

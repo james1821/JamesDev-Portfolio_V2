@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePortfolio } from '../composables/usePortfolio'
+import { findTechIcon } from '../utils/techIcon'
 
 const { data: content } = await usePortfolio()
 
@@ -38,7 +39,18 @@ useSeoMeta({
           <p class="lede mt-5">{{ job.description }}</p>
 
           <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Technologies used">
-            <li v-for="tech in job.tech" :key="tech" class="chip">{{ tech }}</li>
+            <li v-for="tech in job.tech" :key="tech" class="chip">
+              <img
+                v-if="findTechIcon(tech, content?.skills)"
+                :src="findTechIcon(tech, content?.skills)"
+                :alt="`${tech} logo`"
+                width="14"
+                height="14"
+                loading="lazy"
+                class="mr-1 h-3.5 w-3.5 object-contain"
+              />
+              {{ tech }}
+            </li>
           </ul>
         </div>
       </li>

@@ -49,6 +49,7 @@ useSeoMeta({
         v-for="(project, index) in visible"
         :key="project.id"
         :project="project"
+        :skills="content?.skills"
         :eager="index < 3"
       />
     </div>

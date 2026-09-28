@@ -15,7 +15,6 @@ const yearsActive = computed(() => {
 })
 
 const topSkills = computed(() => (content.value?.skills ?? []).slice(0, 10))
-const latestRole = computed(() => content.value?.experience[0])
 
 useSeoMeta({ title: '' })
 </script>
@@ -38,26 +37,7 @@ useSeoMeta({ title: '' })
         link-label="All projects"
       />
       <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        <ProjectCard v-for="project in featured" :key="project.id" :project="project" />
-      </div>
-    </section>
-
-    <section v-if="latestRole" class="shell py-14">
-      <SectionHeading title="Where I work" to="/experience" link-label="Full history" />
-      <div class="surface p-6 sm:p-7">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <CompanyMark :name="latestRole.company" :logo="latestRole.companyLogo" />
-            <div>
-              <p class="font-medium text-content-strong">{{ latestRole.role }}</p>
-              <p class="text-sm text-content">{{ latestRole.company }}</p>
-            </div>
-          </div>
-          <p class="font-mono text-2xs text-content-muted">
-            {{ latestRole.startDate }} – {{ latestRole.endDate }}
-          </p>
-        </div>
-        <p class="lede mt-5">{{ latestRole.description }}</p>
+        <ProjectCard v-for="project in featured" :key="project.id" :project="project" :skills="content.skills" />
       </div>
     </section>
 
