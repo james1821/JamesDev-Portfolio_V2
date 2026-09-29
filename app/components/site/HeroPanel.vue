@@ -83,10 +83,10 @@ onUnmounted(() => clearTimeout(timer))
             <dt class="text-2xs text-content-muted">Years shipping</dt>
             <dd class="mt-0.5 font-mono text-xl text-content-strong">{{ yearsActive }}+</dd>
           </div>
-          <div>
+          <!-- <div>
             <dt class="text-2xs text-content-muted">Projects delivered</dt>
             <dd class="mt-0.5 font-mono text-xl text-content-strong">{{ projectCount }}</dd>
-          </div>
+          </div> -->
           <div v-if="personal.location">
             <dt class="text-2xs text-content-muted">Based in</dt>
             <dd class="mt-0.5 font-mono text-xl text-content-strong">{{ personal.location }}</dd>
